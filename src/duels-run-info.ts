@@ -1,4 +1,5 @@
 export interface DuelsRunInfo {
+	readonly adventureType: 'duels' | 'paid-duels';
 	readonly creationTimestamp: number;
 	readonly reviewId: string;
 	readonly runId: string;
