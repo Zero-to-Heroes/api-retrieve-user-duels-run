@@ -39,6 +39,7 @@ export default async (event): Promise<any> => {
 		console.log('running query', query);
 		const dbResults: readonly any[] = await mysql.query(query);
 		console.log('executed query', dbResults && dbResults.length, dbResults && dbResults.length > 0 && dbResults[0]);
+		await mysql.end();
 
 		const results =
 			!dbResults || dbResults.length === 0
