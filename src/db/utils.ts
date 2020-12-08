@@ -1,3 +1,5 @@
+import SqlString from 'sqlstring';
+
 export const groupByFunction = (keyExtractor: (obj: object | string) => string) => array =>
 	array.reduce((objectsByKeyValue, obj) => {
 		const value = keyExtractor(obj);
@@ -10,12 +12,13 @@ export const buildCondition = (userIds: readonly string[]): string => {
 };
 
 export const getValidUserInfo = async (userId: string, userName: string, mysql): Promise<readonly string[]> => {
+	const escape = SqlString.escape;
 	const userSelectQuery = `
 			SELECT DISTINCT userId FROM user_mapping
 			INNER JOIN (
 				SELECT DISTINCT username FROM user_mapping
 				WHERE 
-					(username = '${userName}' OR username = '${userId}' OR userId = '${userId}')
+					(username = ${escape(userName)} OR username = ${escape(userId)} OR userId = ${escape(userId)})
 					AND username IS NOT NULL
 					AND username != ''
 					AND username != 'null'
