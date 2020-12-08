@@ -26,7 +26,7 @@ export const getValidUserInfo = async (userId: string, userName: string, mysql):
 					AND userId IS NOT NULL
 					AND userId != 'null'
 			) AS x ON x.username = user_mapping.username
-			UNION ALL SELECT '${userId}'
+			UNION ALL SELECT ${escape(userId)}
 		`;
 	console.log('user select query', userSelectQuery);
 	const userIds: any[] = await mysql.query(userSelectQuery);
