@@ -5,5 +5,5 @@ export interface DuelsRewardsInfo {
 	readonly runId: string;
 	readonly rewardType: number;
 	readonly rewardAmount: number;
-	readonly rewardBoosterId: number;
+	readonly rewardBoosterId: string;
 }

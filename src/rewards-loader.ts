@@ -52,7 +52,7 @@ interface DbResult {
 	readonly runId: string;
 	readonly rewardType: number;
 	readonly rewardAmount: number;
-	readonly rewardBoosterId: number;
+	readonly rewardBoosterId: string;
 	readonly wins: number;
 	readonly losses: number;
 	readonly rating: number;
