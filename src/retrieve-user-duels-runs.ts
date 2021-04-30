@@ -15,7 +15,6 @@ export default async (event): Promise<any> => {
 		'Access-Control-Allow-Methods': 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT',
 		'Access-Control-Allow-Origin': event.headers.Origin || event.headers.origin,
 	};
-	console.log('processing event');
 	// Preflight
 	if (!event.body) {
 		const response = {
@@ -23,7 +22,6 @@ export default async (event): Promise<any> => {
 			body: null,
 			headers: headers,
 		};
-		console.log('sending back success response without body', response);
 		return response;
 	}
 
@@ -36,7 +34,6 @@ export default async (event): Promise<any> => {
 
 	const stringResults = JSON.stringify({ results, rewardsResults });
 	const gzippedResults = gzipSync(stringResults).toString('base64');
-	console.log('compressed', stringResults.length, gzippedResults.length);
 	const response = {
 		statusCode: 200,
 		isBase64Encoded: true,
@@ -46,6 +43,5 @@ export default async (event): Promise<any> => {
 			'Content-Encoding': 'gzip',
 		},
 	};
-	console.log('sending back success reponse');
 	return response;
 };

@@ -10,9 +10,7 @@ export const loadRewardsResults = async (mysql, input): Promise<readonly DuelsRe
 			AND creationDate >= '2020-12-07 10:00:00'
 			AND userId IN ${buildCondition(userIds)}	
 		`;
-	console.log('running query', query);
 	const dbResults: readonly DbResult[] = await mysql.query(query);
-	console.log('executed query', dbResults && dbResults.length, dbResults && dbResults.length > 0 && dbResults[0]);
 	await mysql.end();
 
 	if (!dbResults || dbResults.length === 0) {
@@ -38,7 +36,6 @@ export const loadRewardsResults = async (mysql, input): Promise<readonly DuelsRe
 				creationTimestamp: Date.parse(result.creationDate),
 			} as DuelsRewardsInfo),
 	);
-	console.log('results', results);
 	return results;
 };
 

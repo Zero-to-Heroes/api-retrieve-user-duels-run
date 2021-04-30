@@ -10,9 +10,7 @@ export const loadStepResults = async (mysql, input): Promise<readonly DuelsRunIn
 		WHERE adventureType IN ('duels', 'paid-duels')
 		AND userId IN ${buildCondition(userIds)}	
 	`;
-	console.log('running query', query);
 	const dbResults: readonly any[] = await mysql.query(query);
-	console.log('executed query', dbResults && dbResults.length, dbResults && dbResults.length > 0 && dbResults[0]);
 
 	const results =
 		!dbResults || dbResults.length === 0
@@ -24,6 +22,5 @@ export const loadStepResults = async (mysql, input): Promise<readonly DuelsRunIn
 							creationTimestamp: Date.parse(result.creationDate),
 						} as DuelsRunInfo),
 			  );
-	console.log('results', results);
 	return results;
 };
