@@ -21,7 +21,7 @@
 		"dist/**/*"
 	],
 	"dependencies": {
-		"aws-sdk": "^2.524.0",
+		"aws-sdk": "^2.1177.0",
 		"mysql": "^2.17.1",
 		"serverless-mysql": "^1.5.3",
 		"sqlstring": "^2.3.2"
