@@ -19,8 +19,7 @@ Resources:
         Type: AWS::Serverless::Function
         Properties:
             Handler: retrieve-user-duels-runs.default
-            # Runtime: nodejs8.10
-            Runtime: nodejs12.x
+            Runtime: nodejs16.x
             Timeout: 20
             ReservedConcurrentExecutions: 40
             CodeUri: ./dist/retrieve-user-duels-runs
@@ -37,6 +36,24 @@ Resources:
                     Properties:
                         Path: /{proxy+}
                         Method: any
+    RetrieveUserDuelsRunFunction2:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: retrieve-user-duels-runs.default
+            Runtime: nodejs16.x
+            CodeUri: ./dist/retrieve-user-duels-runs
+            Timeout: 20
+            ReservedConcurrentExecutions: 40
+            Policies:
+                - AWSLambdaVPCAccessExecutionRole
+                - SecretsManagerReadWrite
+                - AmazonSESFullAccess
+                # - arn:aws:iam::478062583808:policy/CloudWatchPolicyForLambda # See https://stackoverflow.com/questions/51166504/disable-cloudwatch-to-monitor-logs-for-lambda-function
+            Tags:
+                LambdaName: api-retrieve-user-duels-runs-2
+            AutoPublishAlias: live
+            FunctionUrlConfig:
+                AuthType: NONE
 
 Outputs:
     RetrieveUserDuelsRunApi:
