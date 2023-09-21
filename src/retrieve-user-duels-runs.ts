@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { getConnectionReadOnly } from '@firestone-hs/aws-lambda-utils';
 import { gzipSync } from 'zlib';
-import { getConnection } from './db/rds';
 import { Input } from './input';
 import { loadRewardsResults } from './rewards-loader';
 import { loadStepResults } from './step-loader';
@@ -26,7 +26,7 @@ export default async (event): Promise<any> => {
 	}
 
 	const input: Input = JSON.parse(event.body);
-	const mysql = await getConnection();
+	const mysql = await getConnectionReadOnly();
 
 	const results = await loadStepResults(mysql, input);
 	const rewardsResults = await loadRewardsResults(mysql, input);
