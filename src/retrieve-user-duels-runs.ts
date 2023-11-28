@@ -34,6 +34,7 @@ export default async (event): Promise<any> => {
 
 	const stringResults = JSON.stringify({ results, rewardsResults });
 	const gzippedResults = gzipSync(stringResults).toString('base64');
+	console.debug('sending results');
 	const response = {
 		statusCode: 200,
 		isBase64Encoded: true,

@@ -1,6 +1,6 @@
 import SqlString from 'sqlstring';
 
-export const groupByFunction = (keyExtractor: (obj: object | string) => string) => array =>
+export const groupByFunction = (keyExtractor: (obj: object | string) => string) => (array) =>
 	array.reduce((objectsByKeyValue, obj) => {
 		const value = keyExtractor(obj);
 		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
@@ -8,7 +8,7 @@ export const groupByFunction = (keyExtractor: (obj: object | string) => string) 
 	}, {});
 
 export const buildCondition = (userIds: readonly string[]): string => {
-	return `(${userIds.map(userId => "'" + userId + "'").join(',')})`;
+	return `(${userIds.map((userId) => "'" + userId + "'").join(',')})`;
 };
 
 export const getValidUserInfo = async (userId: string, userName: string, mysql): Promise<readonly string[]> => {
@@ -28,6 +28,8 @@ export const getValidUserInfo = async (userId: string, userName: string, mysql):
 			) AS x ON x.username = user_mapping.username
 			UNION ALL SELECT ${escape(userId)}
 		`;
+	console.debug('running query', userSelectQuery);
 	const userIds: any[] = await mysql.query(userSelectQuery);
-	return userIds.map(result => result.userId);
+	console.debug('got result');
+	return userIds.map((result) => result.userId);
 };

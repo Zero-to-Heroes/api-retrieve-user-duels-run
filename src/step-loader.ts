@@ -10,13 +10,15 @@ export const loadStepResults = async (mysql, input): Promise<readonly DuelsRunIn
 		WHERE adventureType IN ('duels', 'paid-duels')
 		AND userId IN ${buildCondition(userIds)}	
 	`;
+	console.debug('running query', query);
 	const dbResults: readonly any[] = await mysql.query(query);
+	console.debug('got result');
 
 	const results =
 		!dbResults || dbResults.length === 0
 			? []
 			: dbResults.map(
-					result =>
+					(result) =>
 						({
 							...result,
 							creationTimestamp: Date.parse(result.creationDate),

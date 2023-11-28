@@ -10,7 +10,9 @@ export const loadRewardsResults = async (mysql, input): Promise<readonly DuelsRe
 			AND creationDate >= '2020-12-07 10:00:00'
 			AND userId IN ${buildCondition(userIds)}	
 		`;
+	console.debug('running query', query);
 	const dbResults: readonly DbResult[] = await mysql.query(query);
+	console.debug('got result');
 	await mysql.end();
 
 	if (!dbResults || dbResults.length === 0) {
@@ -24,13 +26,14 @@ export const loadRewardsResults = async (mysql, input): Promise<readonly DuelsRe
 	const finalDbResults: DbResult[] = Object.values(groupedByRunId)
 		.map((runs: readonly DbResult[]) => {
 			const latestEntry = Math.max(
-				...runs.map(run => run.creationDate).map(creationDate => Date.parse(creationDate)),
+				...runs.map((run) => run.creationDate).map((creationDate) => Date.parse(creationDate)),
 			);
-			return runs.filter(run => Date.parse(run.creationDate) === latestEntry);
+			return runs.filter((run) => Date.parse(run.creationDate) === latestEntry);
 		})
 		.reduce((a, b) => a.concat(b), []);
+	console.debug('grouped by run');
 	const results = finalDbResults.map(
-		result =>
+		(result) =>
 			({
 				...result,
 				creationTimestamp: Date.parse(result.creationDate),
