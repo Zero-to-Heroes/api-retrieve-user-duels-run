@@ -8,7 +8,8 @@ export const loadRewardsResults = async (mysql, input): Promise<readonly DuelsRe
 			SELECT * FROM dungeon_run_rewards
 			WHERE adventureType IN ('duels', 'paid-duels')
 			AND creationDate >= '2020-12-07 10:00:00'
-			AND userId IN ${buildCondition(userIds)}	
+			AND userId IN ${buildCondition(userIds)}
+			AND creationDate >= DATE_SUB(NOW(), INTERVAL 4 MONTH)
 		`;
 	console.debug('running query', query);
 	const dbResults: readonly DbResult[] = await mysql.query(query);

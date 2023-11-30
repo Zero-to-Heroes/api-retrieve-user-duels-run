@@ -5,10 +5,13 @@ import { DuelsRunInfo } from './duels-run-info';
 export const loadStepResults = async (mysql, input): Promise<readonly DuelsRunInfo[]> => {
 	const userIds = await getValidUserInfo(input.userId, input.userName, mysql);
 
+	// Limit to the last 6 months to reduce the total data load
 	const query = `
-		SELECT * FROM dungeon_run_loot_info
+		SELECT *
+		FROM dungeon_run_loot_info
 		WHERE adventureType IN ('duels', 'paid-duels')
-		AND userId IN ${buildCondition(userIds)}	
+		AND userId IN ${buildCondition(userIds)}
+		AND creationDate >= DATE_SUB(NOW(), INTERVAL 4 MONTH)
 	`;
 	console.debug('running query', query);
 	const dbResults: readonly any[] = await mysql.query(query);
