@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { buildCondition, getValidUserInfo, groupByFunction } from './db/utils';
+import { groupByFunction } from '@firestone-hs/aws-lambda-utils';
+import { buildCondition } from './db/utils';
 import { DuelsRewardsInfo } from './duels-rewards-info';
 
-export const loadRewardsResults = async (mysql, input): Promise<readonly DuelsRewardsInfo[]> => {
-	const userIds = await getValidUserInfo(input.userId, input.userName, mysql);
+export const loadRewardsResults = async (
+	mysql,
+	input,
+	userIds: readonly string[],
+): Promise<readonly DuelsRewardsInfo[]> => {
 	const query = `
 			SELECT * FROM dungeon_run_rewards
 			WHERE adventureType IN ('duels', 'paid-duels')
@@ -13,8 +17,7 @@ export const loadRewardsResults = async (mysql, input): Promise<readonly DuelsRe
 		`;
 	console.debug('running query', query);
 	const dbResults: readonly DbResult[] = await mysql.query(query);
-	console.debug('got result');
-	await mysql.end();
+	console.debug('got rewards result', dbResults?.length);
 
 	if (!dbResults || dbResults.length === 0) {
 		return [];
@@ -32,7 +35,7 @@ export const loadRewardsResults = async (mysql, input): Promise<readonly DuelsRe
 			return runs.filter((run) => Date.parse(run.creationDate) === latestEntry);
 		})
 		.reduce((a, b) => a.concat(b), []);
-	console.debug('grouped by run');
+	console.debug('grouped rewards by run');
 	const results = finalDbResults.map(
 		(result) =>
 			({

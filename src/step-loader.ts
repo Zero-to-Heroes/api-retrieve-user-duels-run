@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { buildCondition, getValidUserInfo } from './db/utils';
+import { buildCondition } from './db/utils';
 import { DuelsRunInfo } from './duels-run-info';
 
-export const loadStepResults = async (mysql, input): Promise<readonly DuelsRunInfo[]> => {
-	const userIds = await getValidUserInfo(input.userId, input.userName, mysql);
-
+export const loadStepResults = async (mysql, input, userIds: readonly string[]): Promise<readonly DuelsRunInfo[]> => {
 	// Limit to the last 6 months to reduce the total data load
 	const query = `
 		SELECT *
@@ -15,7 +13,7 @@ export const loadStepResults = async (mysql, input): Promise<readonly DuelsRunIn
 	`;
 	console.debug('running query', query);
 	const dbResults: readonly any[] = await mysql.query(query);
-	console.debug('got result');
+	console.debug('got steps result', dbResults?.length);
 
 	const results =
 		!dbResults || dbResults.length === 0

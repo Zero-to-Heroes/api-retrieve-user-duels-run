@@ -1,12 +1,5 @@
 import SqlString from 'sqlstring';
 
-export const groupByFunction = (keyExtractor: (obj: object | string) => string) => (array) =>
-	array.reduce((objectsByKeyValue, obj) => {
-		const value = keyExtractor(obj);
-		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-		return objectsByKeyValue;
-	}, {});
-
 export const buildCondition = (userIds: readonly string[]): string => {
 	return `(${userIds.map((userId) => "'" + userId + "'").join(',')})`;
 };

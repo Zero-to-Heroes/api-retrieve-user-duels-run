@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { getConnectionReadOnly } from '@firestone-hs/aws-lambda-utils';
 import { gzipSync } from 'zlib';
+import { getValidUserInfo } from './db/utils';
 import { Input } from './input';
 import { loadRewardsResults } from './rewards-loader';
 import { loadStepResults } from './step-loader';
@@ -28,9 +29,13 @@ export default async (event): Promise<any> => {
 	const input: Input = JSON.parse(event.body);
 	const mysql = await getConnectionReadOnly();
 
-	const results = await loadStepResults(mysql, input);
-	const rewardsResults = await loadRewardsResults(mysql, input);
+	const userIds = await getValidUserInfo(input.userId, input.userName, mysql);
+	const [results, rewardsResults] = await Promise.all([
+		loadStepResults(mysql, input, userIds),
+		loadRewardsResults(mysql, input, userIds),
+	]);
 	await mysql.end();
+	console.debug('loaded DB data', results?.length, rewardsResults?.length);
 
 	const stringResults = JSON.stringify({ results, rewardsResults });
 	const gzippedResults = gzipSync(stringResults).toString('base64');
