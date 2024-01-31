@@ -12,8 +12,8 @@ Resources:
             Runtime: nodejs16.x
             CodeUri: ./dist/retrieve-user-duels-runs
             Timeout: 20
-            ReservedConcurrentExecutions: 40
-            MemorySize: 256
+            ReservedConcurrentExecutions: 10
+            MemorySize: 200
             Layers:
                 - !Sub "arn:aws:lambda:${AWS::Region}:580247275435:layer:LambdaInsightsExtension:14"
             Policies:

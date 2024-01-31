@@ -23,6 +23,6 @@ export const getValidUserInfo = async (userId: string, userName: string, mysql):
 		`;
 	console.debug('running query', userSelectQuery);
 	const userIds: any[] = await mysql.query(userSelectQuery);
-	console.debug('got result');
+	console.debug('got user result', userIds.length);
 	return userIds.map((result) => result.userId);
 };
